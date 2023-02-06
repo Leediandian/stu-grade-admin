@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuDepartmentMapper">
+    <!-- 院级列表 -->
+    <resultMap type="StuDepartment" id="StuDepartmentResult">
+        <result property="departmentId"    column="department_id"    />
+        <result property="departmentName"    column="department_name"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+    <!-- 院系列表以及下面的结果集 -->
+    <resultMap type="StuDepartmentVo" id="StuDepartmentChildrenResult">
+        <result property="departmentId"    column="department_id"    />
+        <result property="departmentName"    column="department_name"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="delFlag"    column="del_flag"    />
+        <collection property="children" select="selectChildrenList" column="department_id" />
+        <!-- qid/sort是定义的变量名, id/sort是主表的字段id/sort,
+        先查出主表的结果, 然后主表记录数是几 就执行几次 collection 的select,
+        javaType="java.util.ArrayList" ofType="com.xxx.modules.xxx.entity.QuestionOption"
+        javaType和ofType 写不写都行,
+        select的值: 对应xml的namespace + 对应xml中的代码片段的id,
+        column作为select语句的参数传入,如果只传一个参数id可以简写: column="id" -->
+    </resultMap>
+    <!-- 专业列表结果集 -->
+    <resultMap type="StuMajor" id="StuMajorResult">
+        <result property="majorId"    column="major_id"    />
+        <result property="majorName"    column="major_name"    />
+        <result property="majorCode"    column="major_code"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="departmentId"    column="department_id"    />
+    </resultMap>
+    <!-- 查询院级下面的专业 -->
+    <select id="selectChildrenList"  parameterType="Long" resultMap="StuMajorResult">
+        select major_id, major_name, major_code, department_id, order_num, del_flag from stu_major
+        where department_id=#{department_id}
+    </select>
+    <!-- 查询院级 结果集是获取其子专业的 -->
+    <select id="selectStuDepartmentChildrenList" parameterType="StuDepartment" resultMap="StuDepartmentChildrenResult">
+        <include refid="selectStuDepartmentVo"/>
+    </select>
+
+
+    <sql id="selectStuDepartmentVo">
+        select department_id, department_name, order_num, del_flag from stu_department
+    </sql>
+
+    <!-- 查询院级列表 结果集是院级列表的 -->
+    <select id="selectStuDepartmentList" parameterType="StuDepartment" resultMap="StuDepartmentResult">
+        <include refid="selectStuDepartmentVo"/>
+        <where>  
+            <if test="departmentName != null  and departmentName != ''"> and department_name like concat('%', #{departmentName}, '%')</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectStuDepartmentByDepartmentId" parameterType="Long" resultMap="StuDepartmentResult">
+        <include refid="selectStuDepartmentVo"/>
+        where department_id = #{departmentId}
+    </select>
+        
+    <insert id="insertStuDepartment" parameterType="StuDepartment" useGeneratedKeys="true" keyProperty="departmentId">
+        insert into stu_department
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="departmentName != null and departmentName != ''">department_name,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="delFlag != null and delFlag != ''">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="departmentName != null and departmentName != ''">#{departmentName},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuDepartment" parameterType="StuDepartment">
+        update stu_department
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="departmentName != null and departmentName != ''">department_name = #{departmentName},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        where department_id = #{departmentId}
+    </update>
+
+    <delete id="deleteStuDepartmentByDepartmentId" parameterType="Long">
+        delete from stu_department where department_id = #{departmentId}
+    </delete>
+
+    <delete id="deleteStuDepartmentByDepartmentIds" parameterType="String">
+        delete from stu_department where department_id in 
+        <foreach item="departmentId" collection="array" open="(" separator="," close=")">
+            #{departmentId}
+        </foreach>
+    </delete>
+</mapper>

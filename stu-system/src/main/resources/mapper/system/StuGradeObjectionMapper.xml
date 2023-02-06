@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuGradeObjectionMapper">
+    
+    <resultMap type="StuGradeObjection" id="StuGradeObjectionResult">
+        <result property="gradeObjId"    column="grade_obj_id"    />
+        <result property="gradeId"    column="grade_id"    />
+        <result property="gradeObjDesc"    column="grade_obj_desc"    />
+        <result property="operationStatus"    column="operation_status"    />
+        <result property="feedback"    column="feedback"    />
+
+        <result property="stuId"    column="stu_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="scaledGrades"    column="scaled_grades"    />
+        <result property="usualGrades"    column="usual_grades"    />
+        <result property="scoreGrades"    column="score_grades"    />
+
+    </resultMap>
+
+    <sql id="selectStuGradeObjectionVo">
+        select o.grade_obj_id, o.grade_id, o.grade_obj_desc, o.operation_status,o.feedback,
+        g.stu_id, g.course_id,g.scaled_grades, g.usual_grades, g.score_grades,
+        c.tea_id,c.course_name
+        from stu_grade_objection as o
+        left join  stu_grade as g
+        on o.grade_id = g.grade_id
+        left join stu_course as c
+        on g.course_id = c.course_id
+    </sql>
+
+    <select id="selectStuGradeObjectionList" parameterType="StuGradeObjection" resultMap="StuGradeObjectionResult">
+        <include refid="selectStuGradeObjectionVo"/>
+        <where>
+            <if test="gradeId != null "> and o.grade_id = #{gradeId}</if>
+            <if test="stuId != null "> and g.stu_id = #{stuId}</if>
+            <if test="teaId != null "> and c.tea_id = #{teaId}</if>
+            <if test="courseId != null "> and g.course_id = #{courseId}</if>
+            <if test="gradeObjDesc != null  and gradeObjDesc != ''"> and o.grade_obj_desc = #{gradeObjDesc}</if>
+            <if test="operationStatus != null  and operationStatus != ''"> and o.operation_status = #{operationStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectStuGradeObjectionByGradeObjId" parameterType="Long" resultMap="StuGradeObjectionResult">
+        <include refid="selectStuGradeObjectionVo"/>
+        where o.grade_obj_id = #{gradeObjId}
+    </select>
+        
+    <insert id="insertStuGradeObjection" parameterType="StuGradeObjection" useGeneratedKeys="true" keyProperty="gradeObjId">
+        insert into stu_grade_objection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gradeId != null">grade_id,</if>
+            <if test="gradeObjDesc != null and gradeObjDesc != ''">grade_obj_desc,</if>
+            <if test="operationStatus != null and operationStatus != ''">operation_status,</if>
+            <if test="feedback != null and feedback != ''">feedback,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gradeId != null">#{gradeId},</if>
+            <if test="gradeObjDesc != null and gradeObjDesc != ''">#{gradeObjDesc},</if>
+            <if test="operationStatus != null and operationStatus != ''">#{operationStatus},</if>
+            <if test="feedback != null and feedback != ''">#{feedback},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuGradeObjection" parameterType="StuGradeObjection">
+        update stu_grade_objection
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gradeId != null">grade_id = #{gradeId},</if>
+            <if test="gradeObjDesc != null and gradeObjDesc != ''">grade_obj_desc = #{gradeObjDesc},</if>
+            <if test="operationStatus != null and operationStatus != ''">operation_status = #{operationStatus},</if>
+            <if test="feedback != null and feedback != ''">feedback = #{feedback},</if>
+        </trim>
+        where grade_obj_id = #{gradeObjId}
+    </update>
+
+    <delete id="deleteStuGradeObjectionByGradeObjId" parameterType="Long">
+        delete from stu_grade_objection where grade_obj_id = #{gradeObjId}
+    </delete>
+
+    <delete id="deleteStuGradeObjectionByGradeObjIds" parameterType="String">
+        delete from stu_grade_objection where grade_obj_id in 
+        <foreach item="gradeObjId" collection="array" open="(" separator="," close=")">
+            #{gradeObjId}
+        </foreach>
+    </delete>
+</mapper>

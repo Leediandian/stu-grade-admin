@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuExamMapper">
+    
+    <resultMap type="StuExam" id="StuExamResult">
+        <result property="examId"    column="exam_id"    />
+        <result property="examName"    column="exam_name"    />
+        <result property="examType"    column="exam_type"    />
+        <result property="examDesc"    column="exam_desc"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="classId"    column="class_id"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="scheduleTime"    column="schedule_time"    />
+        <result property="examClassroom"    column="exam_classroom"    />
+        <result property="examStartTime"    column="exam_start_time"    />
+        <result property="examEndTime"    column="exam_end_time"    />
+    </resultMap>
+
+    <sql id="selectStuExamVo">
+        select e.exam_id, e.exam_name, e.exam_type, e.exam_desc, e.course_id,
+        e.schedule_time, e.exam_classroom, e.exam_start_time, e.exam_end_time,c.course_name,c.class_id,cla.class_name,c.tea_id
+        from stu_exam as e
+        left join stu_course as c
+        on e.course_id = c.course_id
+        left join stu_class as cla
+        on c.class_id = cla.class_id
+    </sql>
+
+    <select id="selectStuExamList" parameterType="StuExam" resultMap="StuExamResult">
+        <include refid="selectStuExamVo"/>
+        <where>
+            <if test="classId != null  and classId != ''"> and c.class_id = #{classId}</if>
+            <if test="teaId != null  and teaId != ''"> and c.tea_id = #{teaId}</if>
+            <if test="examName != null  and examName != ''"> and e.exam_name like concat('%', #{examName}, '%')</if>
+            <if test="examType != null  and examType != ''"> and e.exam_type = #{examType}</if>
+            <if test="examDesc != null  and examDesc != ''"> and e.exam_desc = #{examDesc}</if>
+            <if test="courseId != null "> and e.course_id = #{courseId}</if>
+            <if test="scheduleTime != null "> and e.schedule_time = #{scheduleTime}</if>
+            <if test="examClassroom != null  and examClassroom != ''"> and e.exam_classroom = #{examClassroom}</if>
+            <if test="examStartTime != null "> and e.exam_start_time = #{examStartTime}</if>
+            <if test="examEndTime != null "> and e.exam_end_time = #{examEndTime}</if>
+        </where>
+        order by c.class_id
+    </select>
+    
+    <select id="selectStuExamByExamId" parameterType="Long" resultMap="StuExamResult">
+        <include refid="selectStuExamVo"/>
+        where e.exam_id = #{examId} and e.course_id = c.course_id
+    </select>
+        
+    <insert id="insertStuExam" parameterType="StuExam" useGeneratedKeys="true" keyProperty="examId">
+        insert into stu_exam
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="examName != null and examName != ''">exam_name,</if>
+            <if test="examType != null and examType != ''">exam_type,</if>
+            <if test="examDesc != null">exam_desc,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="scheduleTime != null">schedule_time,</if>
+            <if test="examClassroom != null and examClassroom != ''">exam_classroom,</if>
+            <if test="examStartTime != null">exam_start_time,</if>
+            <if test="examEndTime != null">exam_end_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="examName != null and examName != ''">#{examName},</if>
+            <if test="examType != null and examType != ''">#{examType},</if>
+            <if test="examDesc != null">#{examDesc},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="scheduleTime != null">#{scheduleTime},</if>
+            <if test="examClassroom != null and examClassroom != ''">#{examClassroom},</if>
+            <if test="examStartTime != null">#{examStartTime},</if>
+            <if test="examEndTime != null">#{examEndTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuExam" parameterType="StuExam">
+        update stu_exam
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="examName != null and examName != ''">exam_name = #{examName},</if>
+            <if test="examType != null and examType != ''">exam_type = #{examType},</if>
+            <if test="examDesc != null">exam_desc = #{examDesc},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="scheduleTime != null">schedule_time = #{scheduleTime},</if>
+            <if test="examClassroom != null and examClassroom != ''">exam_classroom = #{examClassroom},</if>
+            <if test="examStartTime != null">exam_start_time = #{examStartTime},</if>
+            <if test="examEndTime != null">exam_end_time = #{examEndTime},</if>
+        </trim>
+        where exam_id = #{examId}
+    </update>
+
+    <delete id="deleteStuExamByExamId" parameterType="Long">
+        delete from stu_exam where exam_id = #{examId}
+    </delete>
+
+    <delete id="deleteStuExamByExamIds" parameterType="String">
+        delete from stu_exam where exam_id in 
+        <foreach item="examId" collection="array" open="(" separator="," close=")">
+            #{examId}
+        </foreach>
+    </delete>
+</mapper>

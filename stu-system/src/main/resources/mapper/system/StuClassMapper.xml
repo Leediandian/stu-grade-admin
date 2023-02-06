@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuClassMapper">
+    
+    <resultMap type="StuClass" id="StuClassResult">
+        <result property="classId"    column="class_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="classGrade"    column="class_grade"    />
+        <result property="majorId"    column="major_id"    />
+        <result property="majorName"    column="major_name"    />
+        <result property="orderNum"    column="order_num"    />
+    </resultMap>
+
+    <resultMap type="StuClassVo" id="StuClassAndStudentResult">
+        <result property="classId"    column="class_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="classGrade"    column="class_grade"    />
+        <result property="majorId"    column="major_id"    />
+        <result property="majorName"    column="major_name"    />
+        <result property="orderNum"    column="order_num"    />
+        <collection property="children" select="selectStuChildrenList" column="class_id" />
+    </resultMap>
+
+    <resultMap type="StuClassVo" id="StuClassAndStudentResultByNullUserName">
+        <result property="classId"    column="class_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="classGrade"    column="class_grade"    />
+        <result property="majorId"    column="major_id"    />
+        <result property="majorName"    column="major_name"    />
+        <result property="orderNum"    column="order_num"    />
+        <collection property="children" select="selectStuChildrenListByNullUserName" column="class_id" />
+    </resultMap>
+
+    <resultMap type="StuStudent" id="StuStudentResult">
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuNum"    column="stu_num"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="stuSex"    column="stu_sex"    />
+        <result property="birthDate"    column="birth_date"    />
+        <result property="classId"    column="class_id"    />
+        <result property="majorId"    column="major_id"    />
+        <result property="departmentId"    column="department_id"    />
+
+        <result property="className"    column="class_name"/>
+        <result property="majorName"    column="major_name"/>
+        <result property="departmentName"    column="department_name"/>
+
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+
+    <sql id="selectStuClassVo">
+        select stu_class.class_id, stu_class.class_name, stu_class.class_grade, stu_class.major_id, stu_class.order_num,stu_major.major_name from stu_class,stu_major
+    </sql>
+
+    <select id="selectStuClassList" parameterType="StuClass" resultMap="StuClassResult">
+        <include refid="selectStuClassVo"/>
+        <where>
+            stu_class.major_id=stu_major.major_id
+            <if test="className != null  and className != ''"> and stu_class.class_name like concat('%', #{className}, '%')</if>
+            <if test="classGrade != null  and classGrade != ''"> and stu_class.class_grade = #{classGrade}</if>
+            <if test="majorId != null "> and stu_class.major_id = #{majorId}</if>
+            <if test="orderNum != null "> and stu_class.order_num = #{orderNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectStuClassByClassId" parameterType="Long" resultMap="StuClassResult">
+        <include refid="selectStuClassVo"/>
+        where stu_class.class_id = #{classId} and  stu_class.major_id=stu_major.major_id
+    </select>
+        
+    <insert id="insertStuClass" parameterType="StuClass" useGeneratedKeys="true" keyProperty="classId">
+        insert into stu_class
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="className != null">class_name,</if>
+            <if test="classGrade != null">class_grade,</if>
+            <if test="majorId != null">major_id,</if>
+            <if test="orderNum != null">order_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="className != null">#{className},</if>
+            <if test="classGrade != null">#{classGrade},</if>
+            <if test="majorId != null">#{majorId},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuClass" parameterType="StuClass">
+        update stu_class
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="className != null">class_name = #{className},</if>
+            <if test="classGrade != null">class_grade = #{classGrade},</if>
+            <if test="majorId != null">major_id = #{majorId},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+        </trim>
+        where class_id = #{classId}
+    </update>
+
+    <delete id="deleteStuClassByClassId" parameterType="Long">
+        delete from stu_class where class_id = #{classId}
+    </delete>
+
+    <delete id="deleteStuClassByClassIds" parameterType="String">
+        delete from stu_class where class_id in 
+        <foreach item="classId" collection="array" open="(" separator="," close=")">
+            #{classId}
+        </foreach>
+    </delete>
+
+    <select id="selectListOfStudent" parameterType="StuClass" resultMap="StuClassAndStudentResult">
+        <include refid="selectStuClassVo"/>
+        <where>
+            stu_class.major_id=stu_major.major_id
+        </where>
+    </select>
+
+    <!-- 查询班级下面的学生 -->
+    <select id="selectStuChildrenList"  parameterType="Long" resultMap="StuStudentResult">
+        select stu.stu_id, stu.stu_num, stu.stu_name, stu.stu_sex, stu.birth_date, stu.class_id, stu.major_id, stu.department_id, stu.del_flag
+        from stu_student stu
+        where stu.class_id=#{class_id}
+    </select>
+
+    <select id="selectListOfStudentByNullUserName" parameterType="StuClass" resultMap="StuClassAndStudentResultByNullUserName">
+        <include refid="selectStuClassVo"/>
+        <where>
+            stu_class.major_id=stu_major.major_id
+        </where>
+    </select>
+
+    <!-- 查询班级下面的学生 (查询的是还没生成账号的学生数据) -->
+    <select id="selectStuChildrenListByNullUserName"  parameterType="Long" resultMap="StuStudentResult">
+        select stu.stu_id, stu.stu_num, stu.stu_name, stu.stu_sex, stu.birth_date, stu.class_id, stu.major_id, stu.department_id, stu.del_flag
+        from stu_student stu
+        LEFT JOIN sys_user  u
+        ON stu.stu_num = u.user_name
+        WHERE stu.class_id=#{class_id} and u.user_name IS NULL;
+    </select>
+
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuTeacherMapper">
+    
+    <resultMap type="StuTeacher" id="StuTeacherResult">
+        <result property="teaId"    column="tea_id"    />
+        <result property="teaNum"    column="tea_num"    />
+        <result property="teaName"    column="tea_name"    />
+        <result property="teaSex"    column="tea_sex"    />
+        <result property="teaAge"    column="tea_age"    />
+        <result property="teaDescription"    column="tea_description"    />
+        <result property="jobTitle"    column="job_title"    />
+        <result property="departmentId"    column="department_id"    />
+        <result property="departmentName"    column="department_name"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectStuTeacherVo">
+        select t.tea_id, t.tea_num, t.tea_name, t.tea_sex, t.tea_age, t.tea_description, t.job_title, t.department_id, t.del_flag, d.department_name
+        from stu_teacher t,stu_department d
+    </sql>
+
+    <select id="selectStuTeacherList" parameterType="StuTeacher" resultMap="StuTeacherResult">
+        <include refid="selectStuTeacherVo"/>
+        <where>
+            t.department_id = d.department_id
+            <if test="teaNum != null  and teaNum != ''"> and t.tea_num = #{teaNum}</if>
+            <if test="teaName != null  and teaName != ''"> and t.tea_name like concat('%', #{teaName}, '%')</if>
+            <if test="teaSex != null  and teaSex != ''"> and t.tea_sex = #{teaSex}</if>
+            <if test="teaAge != null "> and t.tea_age = #{teaAge}</if>
+            <if test="teaDescription != null  and teaDescription != ''"> and t.tea_description = #{teaDescription}</if>
+            <if test="jobTitle != null  and jobTitle != ''"> and t.job_title = #{jobTitle}</if>
+            <if test="departmentId != null  and departmentId != ''"> and t.department_id = #{departmentId}</if>
+        </where>
+    </select>
+    
+    <select id="selectStuTeacherByTeaId" parameterType="Long" resultMap="StuTeacherResult">
+        <include refid="selectStuTeacherVo"/>
+        where t.tea_id = #{teaId} and t.department_id = d.department_id
+    </select>
+        
+    <insert id="insertStuTeacher" parameterType="StuTeacher" useGeneratedKeys="true" keyProperty="teaId">
+        insert into stu_teacher
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teaNum != null and teaNum != ''">tea_num,</if>
+            <if test="teaName != null and teaName != ''">tea_name,</if>
+            <if test="teaSex != null and teaSex != ''">tea_sex,</if>
+            <if test="teaAge != null">tea_age,</if>
+            <if test="teaDescription != null">tea_description,</if>
+            <if test="jobTitle != null and jobTitle != ''">job_title,</if>
+            <if test="departmentId != null and departmentId != ''">department_id,</if>
+            <if test="delFlag != null and delFlag != ''">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teaNum != null and teaNum != ''">#{teaNum},</if>
+            <if test="teaName != null and teaName != ''">#{teaName},</if>
+            <if test="teaSex != null and teaSex != ''">#{teaSex},</if>
+            <if test="teaAge != null">#{teaAge},</if>
+            <if test="teaDescription != null">#{teaDescription},</if>
+            <if test="jobTitle != null and jobTitle != ''">#{jobTitle},</if>
+            <if test="departmentId != null and departmentId != ''">#{departmentId},</if>
+            <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuTeacher" parameterType="StuTeacher">
+        update stu_teacher
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teaNum != null and teaNum != ''">tea_num = #{teaNum},</if>
+            <if test="teaName != null and teaName != ''">tea_name = #{teaName},</if>
+            <if test="teaSex != null and teaSex != ''">tea_sex = #{teaSex},</if>
+            <if test="teaAge != null">tea_age = #{teaAge},</if>
+            <if test="teaDescription != null">tea_description = #{teaDescription},</if>
+            <if test="jobTitle != null and jobTitle != ''">job_title = #{jobTitle},</if>
+            <if test="departmentId != null and departmentId != ''">department_id = #{departmentId},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        where tea_id = #{teaId}
+    </update>
+
+    <delete id="deleteStuTeacherByTeaId" parameterType="Long">
+        delete from stu_teacher where tea_id = #{teaId}
+    </delete>
+
+    <delete id="deleteStuTeacherByTeaIds" parameterType="String">
+        delete from stu_teacher where tea_id in 
+        <foreach item="teaId" collection="array" open="(" separator="," close=")">
+            #{teaId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuExamDetailMapper">
+    
+    <resultMap type="StuExamDetail" id="StuExamDetailResult">
+        <result property="examDetailId"    column="exam_detail_id"    />
+        <result property="examId"    column="exam_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="examName"    column="exam_name"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="examClassroom"    column="exam_classroom"    />
+        <result property="scheduleTime"    column="schedule_time"    />
+        <result property="examStartTime"    column="exam_start_time"    />
+        <result property="examEndTime"    column="exam_end_time"    />
+        <result property="examType"    column="exam_type"    />
+        <result property="classId"    column="class_id"    />
+        <result property="className"    column="class_name"    />
+    </resultMap>
+
+    <sql id="selectStuExamDetailVo">
+        select d.exam_detail_id, d.exam_id, d.stu_id,s.stu_name,e.exam_name,e.exam_classroom,e.schedule_time,
+        e.exam_start_time,e.exam_end_time,e.course_id,c.course_name,e.exam_type,c.class_id,cla.class_name,c.tea_id
+        from stu_exam_detail as d
+        LEFT JOIN stu_student as s
+        ON d.stu_id = s.stu_id
+        LEFT JOIN stu_exam as e
+        ON d.exam_id = e.exam_id
+        LEFT JOIN stu_course AS c
+        ON e.course_id = c.course_id
+        left join stu_class as cla
+        on c.class_id = cla.class_id
+    </sql>
+
+    <select id="selectStuExamDetailList" parameterType="StuExamDetail" resultMap="StuExamDetailResult">
+        <include refid="selectStuExamDetailVo"/>
+        <where>
+            <if test="classId != null  and classId != ''"> and s.class_id = #{classId}</if>
+            <if test="teaId != null  and teaId != ''"> and c.tea_id = #{teaId}</if>
+            <if test="stuName != null  and stuName != ''"> and s.stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="examName != null  and examName != ''"> and e.exam_name like concat('%', #{examName}, '%')</if>
+        </where>
+        order by c.class_id
+    </select>
+    
+    <select id="selectStuExamDetailByExamDetailId" parameterType="Long" resultMap="StuExamDetailResult">
+        <include refid="selectStuExamDetailVo"/>
+        where d.exam_detail_id = #{examDetailId}
+    </select>
+        
+    <insert id="insertStuExamDetail" parameterType="StuExamDetail" useGeneratedKeys="true" keyProperty="examDetailId">
+        insert into stu_exam_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="examId != null">exam_id,</if>
+            <if test="stuId != null">stu_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="examId != null">#{examId},</if>
+            <if test="stuId != null">#{stuId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuExamDetail" parameterType="StuExamDetail">
+        update stu_exam_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="examId != null">exam_id = #{examId},</if>
+            <if test="stuId != null">stu_id = #{stuId},</if>
+        </trim>
+        where exam_detail_id = #{examDetailId}
+    </update>
+
+    <delete id="deleteStuExamDetailByExamDetailId" parameterType="Long">
+        delete from stu_exam_detail where exam_detail_id = #{examDetailId}
+    </delete>
+
+    <delete id="deleteStuExamDetailByExamDetailIds" parameterType="String">
+        delete from stu_exam_detail where exam_detail_id in 
+        <foreach item="examDetailId" collection="array" open="(" separator="," close=")">
+            #{examDetailId}
+        </foreach>
+    </delete>
+</mapper>

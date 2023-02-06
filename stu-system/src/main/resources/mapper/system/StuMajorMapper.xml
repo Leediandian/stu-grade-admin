@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuMajorMapper">
+    
+    <resultMap type="StuMajor" id="StuMajorResult">
+        <result property="majorId"    column="major_id"    />
+        <result property="majorName"    column="major_name"    />
+        <result property="majorCode"    column="major_code"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="departmentId"    column="department_id"    />
+        <association property="stuDepartment"  column="department_id" select="getDepartment" />
+    </resultMap>
+
+    <resultMap type="StuDepartment" id="StuDepartmentResult">
+        <result property="departmentId"    column="department_id"    />
+        <result property="departmentName"    column="department_name"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectStuMajorVo">
+        select major_id, major_name, major_code, department_id, order_num, del_flag from stu_major
+    </sql>
+
+    <select id="selectStuMajorList" parameterType="StuMajor" resultMap="StuMajorResult">
+        <include refid="selectStuMajorVo"/>
+        <where>  
+            <if test="majorName != null  and majorName != ''"> and major_name like concat('%', #{majorName}, '%')</if>
+            <if test="majorCode != null  and majorCode != ''"> and major_code = #{majorCode}</if>
+            <if test="departmentId != null "> and department_id = #{departmentId}</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectStuMajorByMajorId" parameterType="Long" resultMap="StuMajorResult">
+        <include refid="selectStuMajorVo"/>
+        where major_id = #{majorId}
+    </select>
+        
+    <insert id="insertStuMajor" parameterType="StuMajor" useGeneratedKeys="true" keyProperty="majorId">
+        insert into stu_major
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="majorName != null and majorName != ''">major_name,</if>
+            <if test="majorCode != null and majorCode != ''">major_code,</if>
+            <if test="departmentId != null">department_id,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="delFlag != null and delFlag != ''">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="majorName != null and majorName != ''">#{majorName},</if>
+            <if test="majorCode != null and majorCode != ''">#{majorCode},</if>
+            <if test="departmentId != null">#{departmentId},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuMajor" parameterType="StuMajor">
+        update stu_major
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="majorName != null and majorName != ''">major_name = #{majorName},</if>
+            <if test="majorCode != null and majorCode != ''">major_code = #{majorCode},</if>
+            <if test="departmentId != null">department_id = #{departmentId},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        where major_id = #{majorId}
+    </update>
+
+    <delete id="deleteStuMajorByMajorId" parameterType="Long">
+        delete from stu_major where major_id = #{majorId}
+    </delete>
+
+    <delete id="deleteStuMajorByMajorIds" parameterType="String">
+        delete from stu_major where major_id in 
+        <foreach item="majorId" collection="array" open="(" separator="," close=")">
+            #{majorId}
+        </foreach>
+    </delete>
+
+    <select id="getDepartment" resultMap="StuDepartmentResult">
+        select * from stu_department where department_id = #{department_id}
+    </select>
+</mapper>

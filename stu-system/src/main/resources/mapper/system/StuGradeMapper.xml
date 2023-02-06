@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuGradeMapper">
+    
+    <resultMap type="StuGrade" id="StuGradeResult">
+        <result property="gradeId"    column="grade_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="gradeGpa"    column="grade_gpa"    />
+        <result property="scaledGrades"    column="scaled_grades"    />
+        <result property="usualGrades"    column="usual_grades"    />
+        <result property="scoreGrades"    column="score_grades"    />
+        <result property="examId"    column="exam_id"    />
+        <result property="gradeEntryTime"    column="grade_entry_time"    />
+        <result property="term"    column="term"    />
+        <result property="courseCredit"    column="course_credit"    />
+        <result property="classId"    column="class_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="scaledGradesProportion"    column="scaled_grades_proportion"    />
+        <result property="usualGradesProportion"    column="usual_grades_proportion"    />
+        <result property="teaId"    column="tea_id"    />
+
+    </resultMap>
+
+    <sql id="selectStuGradeVo">
+        select g.grade_id, g.stu_id, g.course_id, g.grade_gpa, g.scaled_grades, g.usual_grades, g.score_grades, g.exam_id,
+        g.grade_entry_time, c.term,s.stu_name,c.course_name,c.course_credit,s.class_id,cla.class_name,
+        c.scaled_grades_proportion,c.usual_grades_proportion,c.tea_id
+        from stu_grade g
+        LEFT JOIN stu_course as c
+        ON g.course_id = c.course_id
+        LEFT JOIN stu_student as s
+        ON g.stu_id = s.stu_id
+        LEFT JOIN stu_class as cla
+        ON s.class_id = cla.class_id
+    </sql>
+
+    <select id="selectStuGradeList" parameterType="StuGrade" resultMap="StuGradeResult">
+        <include refid="selectStuGradeVo"/>
+        <where>
+            <if test="stuId != null "> and g.stu_id = #{stuId}</if>
+            <if test="teaId != null "> and c.tea_id = #{teaId}</if>
+            <if test="stuName != null  and stuName != ''"> and s.stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="courseId != null "> and g.course_id = #{courseId}</if>
+            <if test="gradeGpa != null "> and g.grade_gpa = #{gradeGpa}</if>
+            <if test="scaledGrades != null "> and g.scaled_grades = #{scaledGrades}</if>
+            <if test="usualGrades != null "> and g.usual_grades = #{usualGrades}</if>
+            <if test="scoreGrades != null "> and g.score_grades = #{scoreGrades}</if>
+            <if test="examId != null "> and g.exam_id = #{examId}</if>
+            <if test="gradeEntryTime != null "> and g.grade_entry_time = #{gradeEntryTime}</if>
+            <if test="term != null  and term != ''"> and c.term = #{term}</if>
+            <if test="classId != null  and classId != ''"> and s.class_id = #{classId}</if>
+        </where>
+        order by s.class_id
+    </select>
+    
+    <select id="selectStuGradeByGradeId" parameterType="Long" resultMap="StuGradeResult">
+        <include refid="selectStuGradeVo"/>
+        where g.grade_id = #{gradeId}
+    </select>
+        
+    <insert id="insertStuGrade" parameterType="StuGrade" useGeneratedKeys="true" keyProperty="gradeId">
+        insert into stu_grade
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">stu_id,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="gradeGpa != null">grade_gpa,</if>
+            <if test="scaledGrades != null">scaled_grades,</if>
+            <if test="usualGrades != null">usual_grades,</if>
+            <if test="scoreGrades != null">score_grades,</if>
+            <if test="examId != null">exam_id,</if>
+            <if test="gradeEntryTime != null">grade_entry_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuId != null">#{stuId},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="gradeGpa != null">#{gradeGpa},</if>
+            <if test="scaledGrades != null">#{scaledGrades},</if>
+            <if test="usualGrades != null">#{usualGrades},</if>
+            <if test="scoreGrades != null">#{scoreGrades},</if>
+            <if test="examId != null">#{examId},</if>
+            <if test="gradeEntryTime != null">#{gradeEntryTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuGrade" parameterType="StuGrade">
+        update stu_grade
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuId != null">stu_id = #{stuId},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="gradeGpa != null">grade_gpa = #{gradeGpa},</if>
+            <if test="scaledGrades != null">scaled_grades = #{scaledGrades},</if>
+            <if test="usualGrades != null">usual_grades = #{usualGrades},</if>
+            <if test="scoreGrades != null">score_grades = #{scoreGrades},</if>
+            <if test="examId != null">exam_id = #{examId},</if>
+            <if test="gradeEntryTime != null">grade_entry_time = #{gradeEntryTime},</if>
+        </trim>
+        where grade_id = #{gradeId}
+    </update>
+
+    <delete id="deleteStuGradeByGradeId" parameterType="Long">
+        delete from stu_grade where grade_id = #{gradeId}
+    </delete>
+
+    <delete id="deleteStuGradeByGradeIds" parameterType="String">
+        delete from stu_grade where grade_id in 
+        <foreach item="gradeId" collection="array" open="(" separator="," close=")">
+            #{gradeId}
+        </foreach>
+    </delete>
+
+    <insert id="insertMultipleStuGrade"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="gradeId" >
+        insert into stu_grade (stu_id,course_id,grade_gpa,scaled_grades,usual_grades,score_grades,exam_id,grade_entry_time) values
+        <foreach collection="list" item="grade" index="index" separator=",">
+            ( #{grade.stuId},#{grade.courseId},#{grade.gradeGpa},#{grade.scaledGrades},#{grade.usualGrades},#{grade.scoreGrades},#{grade.examId},#{grade.gradeEntryTime} )
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuCourseMapper">
+    
+    <resultMap type="StuCourse" id="StuCourseResult">
+        <result property="courseId"    column="course_id"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="courseCredit"    column="course_credit"    />
+        <result property="courseHours"    column="course_hours"    />
+        <result property="teaId"    column="tea_id"    />
+        <result property="teaName"    column="tea_name"    />
+        <result property="courseDate"    column="course_date"    />
+        <result property="studyingWay"    column="studying_way"    />
+        <result property="courseType"    column="course_type"    />
+        <result property="scaledGradesProportion"    column="scaled_grades_proportion"    />
+        <result property="usualGradesProportion"    column="usual_grades_proportion"    />
+        <result property="classId"    column="class_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="term"    column="term"    />
+    </resultMap>
+
+    <sql id="selectStuCourseVo">
+        select cou.course_id, cou.course_name, cou.course_credit, cou.course_hours, cou.tea_id, cou.course_date, cou.studying_way, cou.course_type,
+        tea.tea_name,cou.scaled_grades_proportion,cou.usual_grades_proportion,cou.class_id,c.class_name,cou.term
+        from stu_course as cou
+        left join stu_teacher as tea
+        on cou.tea_id = tea.tea_id
+        left join stu_class as c
+        on cou.class_id = c.class_id
+    </sql>
+
+    <select id="selectStuCourseList" parameterType="StuCourse" resultMap="StuCourseResult">
+        <include refid="selectStuCourseVo"/>
+        <where>
+            <if test="courseName != null  and courseName != ''"> and cou.course_name like concat('%', #{courseName}, '%')</if>
+            <if test="courseCredit != null "> and cou.course_credit = #{courseCredit}</if>
+            <if test="courseHours != null "> and cou.course_hours = #{courseHours}</if>
+            <if test="teaId != null "> and cou.tea_id = #{teaId}</if>
+            <if test="courseDate != null "> and cou.course_date = #{courseDate}</if>
+            <if test="studyingWay != null  and studyingWay != ''"> and cou.studying_way = #{studyingWay}</if>
+            <if test="courseType != null  and courseType != ''"> and cou.course_type = #{courseType}</if>
+            <if test="classId != null  and classId != ''"> and cou.class_id = #{classId}</if>
+            <if test="term != null  and term != ''"> and cou.term = #{term}</if>
+        </where>
+        order by cou.class_id
+    </select>
+    
+    <select id="selectStuCourseByCourseId" parameterType="Long" resultMap="StuCourseResult">
+        <include refid="selectStuCourseVo"/>
+        where  cou.course_id = #{courseId}
+    </select>
+        
+    <insert id="insertStuCourse" parameterType="StuCourse" useGeneratedKeys="true" keyProperty="courseId">
+        insert into stu_course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseName != null and courseName != ''">course_name,</if>
+            <if test="courseCredit != null">course_credit,</if>
+            <if test="courseHours != null">course_hours,</if>
+            <if test="teaId != null">tea_id,</if>
+            <if test="courseDate != null">course_date,</if>
+            <if test="studyingWay != null and studyingWay != ''">studying_way,</if>
+            <if test="courseType != null">course_type,</if>
+            <if test="scaledGradesProportion != null">scaled_grades_proportion,</if>
+            <if test="usualGradesProportion != null">usual_grades_proportion,</if>
+            <if test="classId != null">class_id,</if>
+            <if test="term != null and term != ''">term,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="courseName != null and courseName != ''">#{courseName},</if>
+            <if test="courseCredit != null">#{courseCredit},</if>
+            <if test="courseHours != null">#{courseHours},</if>
+            <if test="teaId != null">#{teaId},</if>
+            <if test="courseDate != null">#{courseDate},</if>
+            <if test="studyingWay != null and studyingWay != ''">#{studyingWay},</if>
+            <if test="courseType != null">#{courseType},</if>
+            <if test="scaledGradesProportion != null">#{scaledGradesProportion},</if>
+            <if test="usualGradesProportion != null">#{usualGradesProportion},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="term != null and term != ''">#{term},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuCourse" parameterType="StuCourse">
+        update stu_course
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="courseName != null and courseName != ''">course_name = #{courseName},</if>
+            <if test="courseCredit != null">course_credit = #{courseCredit},</if>
+            <if test="courseHours != null">course_hours = #{courseHours},</if>
+            <if test="teaId != null">tea_id = #{teaId},</if>
+            <if test="courseDate != null">course_date = #{courseDate},</if>
+            <if test="studyingWay != null and studyingWay != ''">studying_way = #{studyingWay},</if>
+            <if test="courseType != null">course_type = #{courseType},</if>
+            <if test="scaledGradesProportion != null">scaled_grades_proportion =#{scaledGradesProportion},</if>
+            <if test="usualGradesProportion != null">usual_grades_proportion = #{usualGradesProportion},</if>
+            <if test="classId != null">class_id = #{classId},</if>
+            <if test="term != null and term != ''">term = #{term},</if>
+        </trim>
+        where course_id = #{courseId}
+    </update>
+
+    <delete id="deleteStuCourseByCourseId" parameterType="Long">
+        delete from stu_course where course_id = #{courseId}
+    </delete>
+
+    <delete id="deleteStuCourseByCourseIds" parameterType="String">
+        delete from stu_course where course_id in 
+        <foreach item="courseId" collection="array" open="(" separator="," close=")">
+            #{courseId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuStudentMapper">
+    
+    <resultMap type="StuStudent" id="StuStudentResult">
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuNum"    column="stu_num"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="stuSex"    column="stu_sex"    />
+        <result property="birthDate"    column="birth_date"    />
+        <result property="classId"    column="class_id"    />
+        <result property="majorId"    column="major_id"    />
+        <result property="departmentId"    column="department_id"    />
+
+        <result property="className"    column="class_name"/>
+        <result property="majorName"    column="major_name"/>
+        <result property="departmentName"    column="department_name"/>
+
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectStuStudentVo">
+        select stu.stu_id, stu.stu_num, stu.stu_name, stu.stu_sex, stu.birth_date, stu.class_id, stu.major_id, stu.department_id, stu.del_flag,
+          dep.department_name, cla.class_name,maj.major_name
+        from stu_student stu, stu_department dep,stu_class cla,stu_major maj
+    </sql>
+
+    <select id="selectStuStudentList" parameterType="StuStudent" resultMap="StuStudentResult">
+        <include refid="selectStuStudentVo"/>
+        <where>
+            stu.class_id =cla.class_id
+            and stu.major_id = maj.major_id
+            and stu.department_id = dep.department_id
+            <if test="stuNum != null  and stuNum != ''"> and stu.stu_num = #{stuNum}</if>
+            <if test="stuName != null  and stuName != ''"> and stu.stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="stuSex != null  and stuSex != ''"> and stu.stu_sex = #{stuSex}</if>
+            <if test="birthDate != null "> and stu.birth_date = #{birthDate}</if>
+            <if test="classId != null  and classId != ''"> and stu.class_id = #{classId}</if>
+            <if test="majorId != null "> and stu.major_id = #{majorId}</if>
+            <if test="departmentId != null "> and stu.department_id = #{departmentId}</if>
+        </where>
+    </select>
+    
+    <select id="selectStuStudentByStuId" parameterType="Long" resultMap="StuStudentResult">
+        <include refid="selectStuStudentVo"/>
+        where stu.stu_id = #{stuId}
+        and stu.class_id =cla.class_id
+        and stu.major_id = maj.major_id
+        and stu.department_id = dep.department_id
+    </select>
+        
+    <insert id="insertStuStudent" parameterType="StuStudent" useGeneratedKeys="true" keyProperty="stuId">
+        insert into stu_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuNum != null and stuNum != ''">stu_num,</if>
+            <if test="stuName != null and stuName != ''">stu_name,</if>
+            <if test="stuSex != null and stuSex != ''">stu_sex,</if>
+            <if test="birthDate != null">birth_date,</if>
+            <if test="classId != null and classId != ''">class_id,</if>
+            <if test="majorId != null">major_id,</if>
+            <if test="departmentId != null">department_id,</if>
+            <if test="delFlag != null and delFlag != ''">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuNum != null and stuNum != ''">#{stuNum},</if>
+            <if test="stuName != null and stuName != ''">#{stuName},</if>
+            <if test="stuSex != null and stuSex != ''">#{stuSex},</if>
+            <if test="birthDate != null">#{birthDate},</if>
+            <if test="classId != null and classId != ''">#{classId},</if>
+            <if test="majorId != null">#{majorId},</if>
+            <if test="departmentId != null">#{departmentId},</if>
+            <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStuStudent" parameterType="StuStudent">
+        update stu_student
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuNum != null and stuNum != ''">stu_num = #{stuNum},</if>
+            <if test="stuName != null and stuName != ''">stu_name = #{stuName},</if>
+            <if test="stuSex != null and stuSex != ''">stu_sex = #{stuSex},</if>
+            <if test="birthDate != null">birth_date = #{birthDate},</if>
+            <if test="classId != null and classId != ''">class_id = #{classId},</if>
+            <if test="majorId != null">major_id = #{majorId},</if>
+            <if test="departmentId != null">department_id = #{departmentId},</if>
+            <if test="delFlag != null and delFlag != ''">del_flag = #{delFlag},</if>
+        </trim>
+        where stu_id = #{stuId}
+    </update>
+
+    <delete id="deleteStuStudentByStuId" parameterType="Long">
+        delete from stu_student where stu_id = #{stuId}
+    </delete>
+
+    <delete id="deleteStuStudentByStuIds" parameterType="String">
+        delete from stu_student where stu_id in 
+        <foreach item="stuId" collection="array" open="(" separator="," close=")">
+            #{stuId}
+        </foreach>
+    </delete>
+
+
+</mapper>
