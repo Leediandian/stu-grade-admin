@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tq.system.mapper.stu.StuAnalyseMapper">
+    
+    <resultMap type="StuDataAnalyse" id="StuDataAnalyseResult">
+        <result property="gradeId"    column="grade_id"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuNum"    column="stu_num"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="courseName"    column="course_name"    />
+        <result property="gradeGpa"    column="grade_gpa"    />
+        <result property="scaledGrades"    column="scaled_grades"    />
+        <result property="usualGrades"    column="usual_grades"    />
+        <result property="scoreGrades"    column="score_grades"    />
+        <result property="examId"    column="exam_id"    />
+        <result property="term"    column="term"    />
+        <result property="courseCredit"    column="course_credit"    />
+        <result property="classId"    column="class_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="teaId"    column="tea_id"    />
+
+    </resultMap>
+
+    <sql id="selectStuDataStatisticsVo">
+        select g.grade_id, g.stu_id, g.course_id, g.grade_gpa, g.scaled_grades, g.usual_grades, g.score_grades, g.exam_id,
+         c.term,s.stu_name,c.course_name,c.course_credit,s.class_id,cla.class_name,c.tea_id,s.stu_num
+        from stu_grade g
+        LEFT JOIN stu_course as c
+        ON g.course_id = c.course_id
+        LEFT JOIN stu_student as s
+        ON g.stu_id = s.stu_id
+        LEFT JOIN stu_class as cla
+        ON s.class_id = cla.class_id
+    </sql>
+
+    <select id="searchStuAnalyse" parameterType="StuDataAnalyse" resultMap="StuDataAnalyseResult">
+        <include refid="selectStuDataStatisticsVo"/>
+        <where>
+            <if test="stuId != null "> and g.stu_id = #{stuId}</if>
+            <if test="stuNum != null "> and s.stu_num = #{stuNum}</if>
+            <if test="teaId != null "> and c.tea_id = #{teaId}</if>
+            <if test="classId != null  and classId != ''"> and s.class_id = #{classId}</if>
+            <if test="stuName != null  and stuName != ''"> and s.stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="courseId != null "> and g.course_id = #{courseId}</if>
+            <if test="term != null  and term != ''"> and c.term = #{term}</if>
+        </where>
+        order by s.class_id
+    </select>
+
+    <select id="searchScoreAnalyse" parameterType="StuDataAnalyse" resultMap="StuDataAnalyseResult">
+        <include refid="selectStuDataStatisticsVo"/>
+        <where>
+            <if test="stuId != null "> and g.stu_id = #{stuId}</if>
+            <if test="teaId != null "> and c.tea_id = #{teaId}</if>
+            <if test="classId != null  and classId != ''"> and s.class_id = #{classId}</if>
+            <if test="stuName != null  and stuName != ''"> and s.stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="courseId != null "> and g.course_id = #{courseId}</if>
+            <if test="term != null  and term != ''"> and c.term = #{term}</if>
+        </where>
+        order by s.class_id
+    </select>
+    
+
+</mapper>

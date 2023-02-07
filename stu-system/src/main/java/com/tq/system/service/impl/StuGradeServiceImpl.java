@@ -100,6 +100,7 @@ public class StuGradeServiceImpl implements IStuGradeService
      */
     @Override
     public int insertMultipleStuGrade(List<StuGrade> stuGrade) {
+
         return stuGradeMapper.insertMultipleStuGrade(stuGrade);
     }
 }

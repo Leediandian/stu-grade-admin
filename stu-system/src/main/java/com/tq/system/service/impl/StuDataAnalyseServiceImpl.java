@@ -1,15 +1,13 @@
 package com.tq.system.service.impl;
 
 
-import com.tq.system.mapper.stu.StuClassMapper;
-import com.tq.system.mapper.stu.StuDepartmentMapper;
-import com.tq.system.mapper.stu.StuMajorMapper;
-import com.tq.system.mapper.stu.StuStudentMapper;
+import com.tq.system.domain.stu.StuDataAnalyse;
+import com.tq.system.mapper.stu.*;
 import com.tq.system.service.IStuDataAnalyseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.List;
 
 
 /**
@@ -21,31 +19,26 @@ import java.util.Map;
 @Service
 public class StuDataAnalyseServiceImpl implements IStuDataAnalyseService {
     @Autowired
-    private StuStudentMapper stuStudentMapper;
-    @Autowired
-    private StuClassMapper stuClassMapper;
-    @Autowired
-    private StuDepartmentMapper stuDepartmentMapper;
-    @Autowired
-    private StuMajorMapper stuMajorMapper;
+    private StuAnalyseMapper stuAnalyseMapper;
+
 
     /**
-     * 学生成绩数据分析
+     * 查询单一个学生全部成绩数据分析
      *
-     * @return
+     * @return 学生数据分析集合
      */
     @Override
-    public Map searchStuAnalyse() {
-        return null;
+    public List<StuDataAnalyse> searchStuAnalyse(StuDataAnalyse stuDataAnalyse) {
+        return stuAnalyseMapper.searchStuAnalyse(stuDataAnalyse);
     }
 
     /**
-     * 课程成绩数据分析
+     * 查询该课程里所有学生的成绩数据分析
      *
-     * @return
+     * @return 学生数据分析集合
      */
     @Override
-    public Map searchScoreAnalyse() {
-        return null;
+    public List<StuDataAnalyse> searchScoreAnalyse(StuDataAnalyse stuDataAnalyse) {
+        return stuAnalyseMapper.searchScoreAnalyse(stuDataAnalyse);
     }
 }

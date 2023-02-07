@@ -89,6 +89,12 @@ public class StuExamController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody StuExam stuExam)
     {
+        StuExam item = new StuExam();
+        item.setCourseId(stuExam.getCourseId());
+        List<StuExam> list  = stuExamService.selectStuExamList(item);
+        if(list.size()>0){
+            return error("当前课程已安排考试");
+        }
         return toAjax(stuExamService.insertStuExam(stuExam));
     }
 

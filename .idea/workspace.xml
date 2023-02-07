@@ -1,21 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="066a9f6d-926b-4fd4-8fba-c182af76088f" name="Default Changelist" comment="" />
+    <list default="true" id="59b6a8e7-501c-49e3-85a1-e0fa869712d1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/domain/stu/StuDataAnalyse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/mapper/stu/StuAnalyseMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stu-system/src/main/resources/mapper/system/StuAnalyseMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuDataAnalyseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuDataAnalyseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuExamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuExamController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuGradeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuGradeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/mapper/stu/StuDataAnalyseMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/IStuDataAnalyseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/IStuDataAnalyseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/impl/StuDataAnalyseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/impl/StuDataAnalyseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/impl/StuGradeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/impl/StuGradeServiceImpl.java" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectId" id="2LKdaI3mPROUGyZDO4xjH1N0t5c" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
+  <component name="ProjectId" id="2LN5EhMT6mf2KEWRPSTXHOOGjS7" />
   <component name="PropertiesComponent">
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/stu-system/src/main/resources/mapper/system" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.tq.system.mapper.stu" />
+      <recent name="com.tq.system.domain.stu" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\graduationProject\stu-grade-admin\stu-system\src\main\resources\mapper\system" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -43,17 +78,30 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="066a9f6d-926b-4fd4-8fba-c182af76088f" name="Default Changelist" comment="" />
-      <created>1675623769459</created>
+      <changelist id="59b6a8e7-501c-49e3-85a1-e0fa869712d1" name="Default Changelist" comment="" />
+      <created>1675698589400</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1675623769459</updated>
-      <workItem from="1675623774019" duration="305000" />
-      <workItem from="1675666255762" duration="1195000" />
+      <updated>1675698589400</updated>
+      <workItem from="1675698591031" duration="678000" />
+      <workItem from="1675749993987" duration="12171000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

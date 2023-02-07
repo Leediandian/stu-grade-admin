@@ -1,6 +1,7 @@
 package com.tq.system.controller;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.servlet.http.HttpServletResponse;
 
 import com.tq.system.domain.stu.StuGrade;
@@ -124,6 +125,19 @@ public class StuGradeController extends BaseController
     @PostMapping("/addMultiple")
     public AjaxResult addMultiple(@RequestBody List<StuGrade> stuGrade)
     {
+        AtomicBoolean flag = new AtomicBoolean(false);
+        stuGrade.forEach((e) -> {
+            StuGrade item = new StuGrade();
+            item.setCourseId(e.getCourseId());
+            item.setStuId(e.getStuId());
+            List<StuGrade> list = stuGradeService.selectStuGradeList(e);
+            if(list.size()>0){
+                flag.set(true);
+            }
+        });
+        if(flag.get()){
+            return error("当前添加学生已在该课程内");
+        }
         return toAjax(stuGradeService.insertMultipleStuGrade(stuGrade));
     }
 }
