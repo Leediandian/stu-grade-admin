@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="59b6a8e7-501c-49e3-85a1-e0fa869712d1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/domain/stu/StuDataAnalyse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/mapper/stu/StuAnalyseMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/stu-system/src/main/resources/mapper/system/StuAnalyseMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuDataAnalyseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuDataAnalyseController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuExamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuExamController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuGradeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/controller/StuGradeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/mapper/stu/StuDataAnalyseMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/IStuDataAnalyseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/IStuDataAnalyseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/impl/StuDataAnalyseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/impl/StuDataAnalyseServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/impl/StuGradeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/stu-system/src/main/java/com/tq/system/service/impl/StuGradeServiceImpl.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -84,7 +71,8 @@
       <option name="presentableId" value="Default" />
       <updated>1675698589400</updated>
       <workItem from="1675698591031" duration="678000" />
-      <workItem from="1675749993987" duration="12773000" />
+      <workItem from="1675749993987" duration="13365000" />
+      <workItem from="1676817143226" duration="158000" />
     </task>
     <servers />
   </component>
